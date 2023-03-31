@@ -1,0 +1,28 @@
+.form-mp div,
+input {
+	@apply transition-all ease-in-out duration-150;
+}
+
+.form-mp div:nth-child(3) {
+	@apply order-1;
+}
+
+.form-mp div {
+	@apply order-2;
+}
+
+.form-mp section {
+	@apply order-2;
+}
+
+.form-mp section div {
+	@apply order-[initial];
+}
+
+.form-mp form:nth-child(2) {
+	@apply hidden;
+}
+
+.form-mp h2 {
+	@apply order-2;
+}
