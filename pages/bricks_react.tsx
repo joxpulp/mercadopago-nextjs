@@ -13,9 +13,9 @@ declare global {
 
 export default function BricksReact() {
 	// Submit
-	const onSubmit = async (params: any) => {
-		console.log(params);
-		// console.log('Submitted');
+	const onSubmit = async () => {
+		const formData = await window.cardPaymentBrickController.getFormData();
+		console.log(formData);
 	};
 
 	return (
@@ -26,7 +26,7 @@ export default function BricksReact() {
 						amount: 100,
 						payer: { email: 'joxpulp@gmail.com' },
 					}}
-					onSubmit={onSubmit}
+					onSubmit={async (params) => console.log(params)}
 					customization={{
 						visual: {
 							hideFormTitle: true,
@@ -56,6 +56,12 @@ export default function BricksReact() {
 						},
 					}}
 				/>
+				<button
+					onClick={onSubmit}
+					className="rounded-md bg-green-400 p-[10px] w-fit"
+				>
+					Enviar Pago
+				</button>
 			</div>
 		</div>
 	);
