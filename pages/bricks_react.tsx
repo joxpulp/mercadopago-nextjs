@@ -13,8 +13,9 @@ declare global {
 
 export default function BricksReact() {
 	// Submit
-	const onSubmit = async () => {
-		console.log('Submitted')
+	const onSubmit = async (params: any) => {
+		console.log(params);
+		// console.log('Submitted');
 	};
 
 	return (

@@ -19,10 +19,6 @@ input {
 	@apply order-[initial];
 }
 
-.form-mp form:nth-child(2) {
-	@apply hidden;
-}
-
 .form-mp h2 {
 	@apply order-2;
 }
