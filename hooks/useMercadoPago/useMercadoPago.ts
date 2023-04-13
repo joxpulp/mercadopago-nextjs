@@ -3,6 +3,7 @@ import { loadMercadoPago } from '@mercadopago/sdk-js';
 import {
 	ICardInfo,
 	IConfig,
+	ICreateCardToken,
 	IErrorMessages,
 	IErrorMessagesObject,
 	IErrorMessagesState,
@@ -23,7 +24,7 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 	const [paymentMethodInfo, setPaymentMethodInfo] =
 		useState<IPaymentMethodInfo>({
 			brand: '',
-			paymentType: '',
+			cardType: '',
 		});
 	const [errorMessages, setErrorMessages] = useState<IErrorMessagesState>({
 		cardNumber: { invalid: false } as IErrorMessagesObject,
@@ -31,7 +32,9 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 		securityCode: { invalid: false } as IErrorMessagesObject,
 	});
 
-	const createCardToken = async (cardInfo: ICardInfo) => {
+	const createCardToken = async (
+		cardInfo: ICardInfo
+	): Promise<ICreateCardToken | unknown> => {
 		if (mercadoPago) {
 			try {
 				return await mercadoPago.fields.createCardToken({
@@ -77,13 +80,13 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 						if (results.length) {
 							setPaymentMethodInfo({
 								brand: results[0].id,
-								paymentType: results[0].payment_type_id,
+								cardType: results[0].payment_type_id,
 							});
 						}
 					} else {
 						setPaymentMethodInfo({
 							brand: '',
-							paymentType: '',
+							cardType: '',
 						});
 					}
 				};

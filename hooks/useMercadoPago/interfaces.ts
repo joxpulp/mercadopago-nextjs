@@ -13,13 +13,13 @@ export interface IIdentificationTypes {
 	id: string;
 	name: string;
 	type: string;
-	minLength: number;
-	maxLength: number;
+	min_length: number;
+	max_length: number;
 }
 
 export interface IPaymentMethodInfo {
 	brand: string;
-	paymentType: string;
+	cardType: string;
 }
 
 export interface IErrorMessagesObject {
@@ -38,6 +38,34 @@ export interface ICardInfo {
 	identificationNumber: string;
 }
 
+interface Identification {
+	number: string;
+	type: string;
+}
+interface Cardholder {
+	identification: Identification;
+	name: string;
+}
+
+export interface ICreateCardToken {
+	id: string;
+	public_key: string;
+	first_six_digits: string;
+	expiration_month: number;
+	expiration_year: number;
+	last_four_digits: string;
+	cardholder: Cardholder;
+	status: string;
+	date_created: Date;
+	date_last_updated: Date;
+	date_due: Date;
+	luhn_validation: boolean;
+	live_mode: boolean;
+	require_esc: boolean;
+	card_number_length: number;
+	security_code_length: number;
+}
+
 export interface IConfig {
 	style: {
 		color: string;
@@ -46,8 +74,8 @@ export interface IConfig {
 		errorBorderColor: string;
 	};
 	placeholder: {
-		cardNumber: string;
-		expirationDate: string;
-		securityCode: string;
+		cardNumber?: string;
+		expirationDate?: string;
+		securityCode?: string;
 	};
 }

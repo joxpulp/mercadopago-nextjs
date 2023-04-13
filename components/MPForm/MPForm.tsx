@@ -1,3 +1,4 @@
+import { ICreateCardToken } from '../../hooks/useMercadoPago/interfaces';
 import { useMercadoPago } from '../../hooks/useMercadoPago/useMercadoPago';
 import MPFormField from './MPFormField/MPFormField';
 
@@ -21,11 +22,11 @@ function MPForm() {
 	);
 
 	const onSubmit = async () => {
-		const token = await createCardToken({
+		const token = (await createCardToken({
 			cardholderName: 'pepe',
 			identificationType: 'DNI',
 			identificationNumber: '95216583',
-		});
+		})) as ICreateCardToken;
 		console.log(token);
 	};
 
@@ -34,6 +35,8 @@ function MPForm() {
 
 	return (
 		<div className="m-[20px] w-[50%] flex flex-col gap-[13px]">
+			{/* Dado que estamos pasando como id 'cardNumber', en la prop de errorMessage
+				pasamos el errorMessage correspondiente a ese id, y asi con cada campo */}
 			<MPFormField
 				id="cardNumber"
 				label="Numero de tarjeta"
