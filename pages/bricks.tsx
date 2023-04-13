@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMercadoPago } from '../hooks/useMercadoPago/useMercadoPago';
+import { useMercadoPagoOld } from '../hooks/useMercadoPagoOld/useMercadoPagoOld';
 import { useEffect } from 'react';
 
 declare global {
@@ -9,7 +9,7 @@ declare global {
 }
 
 export default function Bricks() {
-	const mp = useMercadoPago('TEST-12e0021e-da80-41e0-bf96-14d02ea8fe9c', 'AR');
+	const mp = useMercadoPagoOld('TEST-12e0021e-da80-41e0-bf96-14d02ea8fe9c', 'AR');
 	// Custom Submit
 	const onSubmit = async () => {
 		const formData = await window.cardPaymentBrickController.getFormData();
