@@ -52,7 +52,11 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 	useEffect(() => {
 		const loadSecureFields = async () => {
 			await loadMercadoPago();
-			setMercadoPago(new window.MercadoPago(publicKey));
+			setMercadoPago(
+				new window.MercadoPago(publicKey, {
+					trackingDisabled: true,
+				})
+			);
 		};
 		loadSecureFields();
 	}, [publicKey]);

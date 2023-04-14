@@ -15,6 +15,7 @@ export const useMercadoPagoOld = (publicKey: string, country: string) => {
 			setMp(
 				new window.MercadoPago(publicKey, {
 					locale: `es-${country}`,
+					trackingDisabled: true,
 				})
 			);
 		};
