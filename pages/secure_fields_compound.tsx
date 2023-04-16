@@ -17,8 +17,6 @@ function SecureFieldsCompound() {
 			style={{
 				color: '#000000',
 				placeholderColor: '#D4D8E1',
-				focusBorderColor: '#950EE1',
-				errorBorderColor: '#FF455C',
 			}}
 		>
 			<MPFormC.CardNumber

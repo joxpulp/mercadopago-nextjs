@@ -12,12 +12,14 @@ import {
 	IErrorMessagesState,
 	ICreateCardToken,
 	ICardInfo,
+	IFocusState,
 } from '../../hooks/useMercadoPago/interfaces';
 import { useMercadoPago } from '../../hooks/useMercadoPago/useMercadoPago';
 import MPFormField from './MPFormField/MPFormField';
 
 interface IMPFormContext {
 	idTypes: IIdentificationTypes[] | undefined;
+	focusState: IFocusState;
 	errorMessages: IErrorMessagesState;
 	createCardToken(cardInfo: ICardInfo): Promise<ICreateCardToken | unknown>;
 	setPlaceholder: Dispatch<SetStateAction<IPlaceholderState>>;
@@ -34,8 +36,6 @@ interface IMPForm {
 	style: {
 		color: string;
 		placeholderColor: string;
-		focusBorderColor: string;
-		errorBorderColor: string;
 	};
 	className?: string;
 	children: ReactNode;
@@ -58,14 +58,18 @@ const useMPFormContext = () => {
 
 function MPFormC({ children, style, className, publicKey }: IMPForm) {
 	const [placeholder, setPlaceholder] = useState<IPlaceholderState>({});
-	const { idTypes, errorMessages, createCardToken } = useMercadoPago(
-		publicKey,
-		{ style, placeholder }
-	);
+	const { idTypes, errorMessages, createCardToken, focusState } =
+		useMercadoPago(publicKey, { style, placeholder });
 
 	return (
 		<MPFormContext.Provider
-			value={{ idTypes, errorMessages, createCardToken, setPlaceholder }}
+			value={{
+				idTypes,
+				errorMessages,
+				createCardToken,
+				setPlaceholder,
+				focusState,
+			}}
 		>
 			<div className={className}>{children}</div>
 		</MPFormContext.Provider>
@@ -76,7 +80,7 @@ MPFormC.CardNumber = function MPFormCardNumber({
 	label,
 	placeholder,
 }: IMPFormField) {
-	const { errorMessages, setPlaceholder } = useMPFormContext();
+	const { errorMessages, setPlaceholder, focusState } = useMPFormContext();
 
 	useEffect(() => {
 		setPlaceholder((prev) => ({ ...prev, cardNumber: placeholder }));
@@ -85,6 +89,7 @@ MPFormC.CardNumber = function MPFormCardNumber({
 		<MPFormField
 			label={label}
 			id="cardNumber"
+			focusState={focusState.cardNumber}
 			errorMessage={errorMessages.cardNumber}
 		/>
 	);
@@ -94,7 +99,7 @@ MPFormC.ExpirationDate = function MPFormExpirationDate({
 	label,
 	placeholder,
 }: IMPFormField) {
-	const { errorMessages, setPlaceholder } = useMPFormContext();
+	const { errorMessages, setPlaceholder, focusState } = useMPFormContext();
 
 	useEffect(() => {
 		setPlaceholder((prev) => ({ ...prev, expirationDate: placeholder }));
@@ -104,6 +109,7 @@ MPFormC.ExpirationDate = function MPFormExpirationDate({
 		<MPFormField
 			label={label}
 			id="expirationDate"
+			focusState={focusState.expirationDate}
 			errorMessage={errorMessages.expirationDate}
 		/>
 	);
@@ -113,7 +119,7 @@ MPFormC.SecurityCode = function MPFormSecurityCode({
 	label,
 	placeholder,
 }: IMPFormField) {
-	const { errorMessages, setPlaceholder } = useMPFormContext();
+	const { errorMessages, setPlaceholder, focusState } = useMPFormContext();
 
 	useEffect(() => {
 		setPlaceholder((prev) => ({ ...prev, securityCode: placeholder }));
@@ -123,6 +129,7 @@ MPFormC.SecurityCode = function MPFormSecurityCode({
 		<MPFormField
 			label={label}
 			id="securityCode"
+			focusState={focusState.securityCode}
 			errorMessage={errorMessages.securityCode}
 		/>
 	);

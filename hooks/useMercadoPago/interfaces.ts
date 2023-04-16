@@ -2,6 +2,11 @@ export interface IErrorMessagesDetails {
 	reason: string;
 	expectedType: string;
 }
+
+export interface IFocusState {
+	[key: string]: { focus: boolean };
+}
+
 export interface IErrorMessages {
 	cause: string;
 	message: string;
@@ -69,8 +74,6 @@ export interface IConfig {
 	style: {
 		color: string;
 		placeholderColor: string;
-		focusBorderColor: string;
-		errorBorderColor: string;
 	};
 	placeholder: {
 		cardNumber?: string;
