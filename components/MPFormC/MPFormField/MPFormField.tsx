@@ -3,7 +3,7 @@ interface IMPFormField {
 	id: 'cardNumber' | 'expirationDate' | 'securityCode';
 	label: string;
 	errorMessage: IErrorMessagesObject;
-	focusState: { focus: boolean };
+	focusState: boolean;
 }
 
 function MPFormField({ id, label, errorMessage, focusState }: IMPFormField) {
@@ -15,13 +15,13 @@ function MPFormField({ id, label, errorMessage, focusState }: IMPFormField) {
 				className={`${
 					errorMessage.invalid
 						? 'border-red-500'
-						: focusState.focus
+						: focusState
 						? 'border-purple-500'
 						: 'border-[#D4D8E1]'
 				} w-full border transition-all duration-200 h-[48px] px-[15px] py-[13px] rounded-[4px]`}
 			></div>
 			{errorMessage.invalid && (
-				<div className="text-red-500">{errorMessage.error}</div>
+				<div className="text-red-500">{errorMessage.message}</div>
 			)}
 		</div>
 	);

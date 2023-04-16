@@ -5,10 +5,9 @@ import {
 	IConfig,
 	ICreateCardToken,
 	IErrorMessages,
-	IErrorMessagesObject,
-	IErrorMessagesState,
-	IFocusState,
+	IFieldData,
 	IIdentificationTypes,
+	IMPEventAttributes,
 	IPaymentMethodInfo,
 } from './interfaces';
 import { getErrorMessage } from './util';
@@ -22,59 +21,48 @@ declare global {
 
 export const useMercadoPago = (publicKey: string, config: IConfig) => {
 	const [mercadoPago, setMercadoPago] = useState<any>();
-	const [focusState, setIsFocusState] = useState<IFocusState>({
-		cardNumber: { focus: false },
-		expirationDate: { focus: false },
-		securityCode: { focus: false },
-	});
-	const [errorMessages, setErrorMessages] = useState<IErrorMessagesState>({
-		cardNumber: { invalid: false } as IErrorMessagesObject,
-		expirationDate: { invalid: false } as IErrorMessagesObject,
-		securityCode: { invalid: false } as IErrorMessagesObject,
-	});
 	const [idTypes, setIdTypes] = useState<IIdentificationTypes[]>();
 	const [paymentMethodInfo, setPaymentMethodInfo] =
 		useState<IPaymentMethodInfo>({
 			brand: '',
 			cardType: '',
 		});
+	const [fieldData, setFieldData] = useState<IFieldData>({
+		cardNumber: { error: { invalid: false }, isFocus: false },
+		expirationDate: { error: { invalid: false }, isFocus: false },
+		securityCode: { error: { invalid: false }, isFocus: false },
+	});
 
-	const setFocusState = ({ field }: { field: string }) => {
-		setIsFocusState((prev) => ({
+	const setFocusState = ({ field }: IMPEventAttributes) => {
+		setFieldData((prev) => ({
 			...prev,
-			[field]: { focus: true },
+			[field]: { ...prev[field], isFocus: true },
 		}));
 	};
 
-	const setBlurState = ({ field }: { field: string }) => {
-		setIsFocusState((prev) => ({
+	const setBlurState = ({ field }: IMPEventAttributes) => {
+		setFieldData((prev) => ({
 			...prev,
-			[field]: { focus: false },
+			[field]: { ...prev[field], isFocus: false },
 		}));
 	};
 
-	const setValidations = ({
-		field,
-		errorMessages,
-	}: {
-		field: string;
-		errorMessages: IErrorMessages[];
-	}) => {
+	const setValidations = ({ field, errorMessages }: IMPEventAttributes) => {
 		if (errorMessages.length) {
 			const errorMessage = getErrorMessage(errorMessages) as IErrorMessages;
-			setErrorMessages((prev) => ({
+			setFieldData((prev) => ({
 				...prev,
 				[field]: {
-					invalid: true,
-					error: errorMessage.message,
+					...prev[field],
+					error: { invalid: true, message: errorMessage.message },
 				},
 			}));
 		} else {
-			setErrorMessages((prev) => ({
+			setFieldData((prev) => ({
 				...prev,
 				[field]: {
-					invalid: false,
-					error: '',
+					...prev[field],
+					error: { invalid: false, message: '' },
 				},
 			}));
 		}
@@ -113,21 +101,25 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 					const errorMessages = error as IErrorMessages[];
 					errorMessages.map((e) => {
 						if (e.field === 'expirationMonth' || e.field === 'expirationYear') {
-							setErrorMessages((prev) => ({
+							setFieldData((prev) => ({
 								...prev,
 								expirationDate: {
-									invalid: true,
-									error: getErrorMessage(errorMessages, e.field)
-										?.message as string,
+									...prev.expirationDate,
+									error: {
+										invalid: true,
+										message: getErrorMessage(errorMessages, e.field)?.message,
+									},
 								},
 							}));
 						} else {
-							setErrorMessages((prev) => ({
+							setFieldData((prev) => ({
 								...prev,
 								[e.field]: {
-									invalid: true,
-									error: getErrorMessage(errorMessages, e.field)
-										?.message as string,
+									...prev[e.field as 'cardNumber' | 'securityCode'],
+									error: {
+										invalid: true,
+										message: getErrorMessage(errorMessages, e.field)?.message,
+									},
 								},
 							}));
 						}
@@ -153,12 +145,11 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 
 	// Mount SecureFields
 	useEffect(() => {
-		const fields: { cardNumber: any; expirationDate: any; securityCode: any } =
-			{
-				cardNumber: null,
-				expirationDate: null,
-				securityCode: null,
-			};
+		const fields: { [key: string]: any } = {
+			cardNumber: null,
+			expirationDate: null,
+			securityCode: null,
+		};
 		const mountSecureFields = async () => {
 			if (mercadoPago) {
 				const baseStyles = {
@@ -224,8 +215,7 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 
 	return {
 		idTypes,
-		errorMessages,
-		focusState,
+		fieldData,
 		createCardToken,
 		paymentMethodInfo,
 	};
