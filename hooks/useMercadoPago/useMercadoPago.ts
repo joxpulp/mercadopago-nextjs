@@ -132,7 +132,7 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 
 	// Initialize MercadoPago SDK
 	useEffect(() => {
-		const loadSecureFields = async () => {
+		const initMercadoPagoSDK = async () => {
 			await loadMercadoPago();
 			setMercadoPago(
 				new window.MercadoPago(publicKey, {
@@ -140,25 +140,26 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 				})
 			);
 		};
-		loadSecureFields();
+		initMercadoPagoSDK();
 	}, [publicKey]);
 
 	// Mount SecureFields
 	useEffect(() => {
+		// Set createCardToken Method in global variable
+		window.createCardToken = createCardToken;
 		const fields: { [key: string]: any } = {
 			cardNumber: null,
 			expirationDate: null,
 			securityCode: null,
 		};
-		const mountSecureFields = async () => {
+		const initSecureFields = async () => {
 			if (mercadoPago) {
 				const baseStyles = {
 					color: config.style.color,
 					placeholderColor: config.style.placeholderColor,
 				};
 
-				// Set createCardToken Method in global variable
-				window.createCardToken = createCardToken;
+				// Set identification Types to idTypes State
 				setIdTypes(await mercadoPago.getIdentificationTypes());
 
 				// Card Number Input Mounting
@@ -194,23 +195,24 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 					.on('validityChange', setValidations);
 			}
 		};
-		mountSecureFields();
+		initSecureFields();
 		return () => {
 			if (mercadoPago) {
+				// Unmount fields on re-render
 				fields.cardNumber.unmount();
 				fields.expirationDate.unmount();
 				fields.securityCode.unmount();
 			}
 		};
 	}, [
+		mercadoPago,
 		createCardToken,
+		getPaymentMethodId,
+		config.style.color,
+		config.style.placeholderColor,
 		config.placeholder.cardNumber,
 		config.placeholder.expirationDate,
 		config.placeholder.securityCode,
-		config.style.color,
-		config.style.placeholderColor,
-		mercadoPago,
-		getPaymentMethodId,
 	]);
 
 	return {
