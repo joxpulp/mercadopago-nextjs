@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { loadMercadoPago } from '@mercadopago/sdk-js';
 import {
 	ICardInfo,
@@ -10,10 +10,11 @@ import {
 	IIdentificationTypes,
 	IPaymentMethodInfo,
 } from './interfaces';
-import { getErrorMessage } from './util';
+import { changeBorderColorError, getErrorMessage } from './util';
 
 declare global {
 	interface Window {
+		createCardToken: any;
 		MercadoPago: any;
 	}
 }
@@ -32,21 +33,38 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 		securityCode: { invalid: false } as IErrorMessagesObject,
 	});
 
-	const createCardToken = async (
-		cardInfo: ICardInfo
-	): Promise<ICreateCardToken | unknown> => {
-		if (mercadoPago) {
-			try {
-				return await mercadoPago.fields.createCardToken({
-					cardholderName: cardInfo.cardholderName,
-					identificationType: cardInfo.identificationType,
-					identificationNumber: cardInfo.identificationNumber,
-				});
-			} catch (error) {
-				return error;
+	const createCardToken = useCallback(
+		async (cardInfo: ICardInfo): Promise<ICreateCardToken | unknown> => {
+			if (mercadoPago) {
+				try {
+					return await mercadoPago.fields.createCardToken({
+						cardholderName: cardInfo.cardholderName,
+						identificationType: cardInfo.identificationType,
+						identificationNumber: cardInfo.identificationNumber,
+					});
+				} catch (error) {
+					setErrorMessages({
+						cardNumber: { invalid: true, error: 'CardNumber is empty' },
+						expirationDate: {
+							invalid: true,
+							error: 'Expiration Date is empty',
+						},
+						securityCode: {
+							invalid: true,
+							error: 'SecurityCode is Empty',
+						},
+					});
+					changeBorderColorError('cardNumber', config.style.errorBorderColor);
+					changeBorderColorError(
+						'expirationDate',
+						config.style.errorBorderColor
+					);
+					changeBorderColorError('securityCode', config.style.errorBorderColor);
+				}
 			}
-		}
-	};
+		},
+		[config.style.errorBorderColor, mercadoPago]
+	);
 
 	// Initialize MercadoPago SDK
 	useEffect(() => {
@@ -63,8 +81,16 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 
 	// Mount SecureFields
 	useEffect(() => {
+		const fields: { cardNumber: any; expirationDate: any; securityCode: any } =
+			{
+				cardNumber: null,
+				expirationDate: null,
+				securityCode: null,
+			};
 		const mountSecureFields = async () => {
 			if (mercadoPago) {
+				// Set createCardToken Method in global variable
+				window.createCardToken = createCardToken;
 				setIdTypes(await mercadoPago.getIdentificationTypes());
 
 				const baseStyles = {
@@ -131,7 +157,6 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 							...prev,
 							[field]: {
 								invalid: true,
-								type: error.cause,
 								error: error.message,
 							},
 						}));
@@ -142,7 +167,6 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 							...prev,
 							[field]: {
 								invalid: false,
-								type: '',
 								error: '',
 							},
 						}));
@@ -151,7 +175,7 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 				};
 
 				// Card Number Input
-				mercadoPago.fields
+				fields.cardNumber = mercadoPago.fields
 					.create('cardNumber', {
 						placeholder: config.placeholder.cardNumber,
 						style: baseStyles,
@@ -163,7 +187,7 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 					.on('binChange', getPaymentMethodId)
 					.on('ready', getBaseBorderColor);
 				// Expiration Date input
-				mercadoPago.fields
+				fields.expirationDate = mercadoPago.fields
 					.create('expirationDate', {
 						placeholder: config.placeholder.expirationDate,
 						style: baseStyles,
@@ -173,7 +197,7 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 					.on('blur', changeBorderColorBlur)
 					.on('validityChange', setValidations);
 				// Security code input
-				mercadoPago.fields
+				fields.securityCode = mercadoPago.fields
 					.create('securityCode', {
 						placeholder: config.placeholder.securityCode,
 						style: baseStyles,
@@ -185,7 +209,15 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 			}
 		};
 		mountSecureFields();
+		return () => {
+			if (mercadoPago) {
+				fields.cardNumber.unmount();
+				fields.expirationDate.unmount();
+				fields.securityCode.unmount();
+			}
+		};
 	}, [
+		createCardToken,
 		config.placeholder.cardNumber,
 		config.placeholder.expirationDate,
 		config.placeholder.securityCode,
