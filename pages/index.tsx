@@ -9,6 +9,9 @@ export default function Home() {
 				<Link className="underline" href="./secure_fields">
 					Secure Fields
 				</Link>
+				<Link className="underline" href="./secure_fields_compound">
+					Secure Fields Compound Components
+				</Link>
 				<Link className="underline" href="./bricks">
 					Bricks no React
 				</Link>

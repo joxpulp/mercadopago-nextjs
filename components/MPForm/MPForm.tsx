@@ -6,9 +6,7 @@ function MPForm() {
 	const config = {
 		style: {
 			color: '#000000',
-			placeholderColor: '#D4D8E1',
-			focusBorderColor: '#950EE1',
-			errorBorderColor: '#FF455C',
+			placeholderColor: '#D4D8E1'
 		},
 		placeholder: {
 			cardNumber: '1234 1234 1234 1234',
@@ -16,7 +14,7 @@ function MPForm() {
 			securityCode: 'Codigo CVV',
 		},
 	};
-	const { idTypes, errorMessages, createCardToken } = useMercadoPago(
+	const { idTypes, fieldData, createCardToken } = useMercadoPago(
 		'TEST-12e0021e-da80-41e0-bf96-14d02ea8fe9c',
 		config
 	);
@@ -40,18 +38,21 @@ function MPForm() {
 			<MPFormField
 				id="cardNumber"
 				label="Numero de tarjeta"
-				errorMessage={errorMessages.cardNumber}
+				focusState={fieldData.cardNumber.isFocus}
+				errorMessage={fieldData.cardNumber.error}
 			/>
 			<div className="flex gap-[13px]">
 				<MPFormField
 					id="expirationDate"
 					label="Fecha de vencimiento"
-					errorMessage={errorMessages.expirationDate}
+					focusState={fieldData.expirationDate.isFocus}
+					errorMessage={fieldData.expirationDate.error}
 				/>
 				<MPFormField
 					id="securityCode"
 					label="Código CVC"
-					errorMessage={errorMessages.securityCode}
+					focusState={fieldData.securityCode.isFocus}
+					errorMessage={fieldData.securityCode.error}
 				/>
 			</div>
 			<div className="flex gap-[13px]">

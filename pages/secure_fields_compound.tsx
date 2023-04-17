@@ -80,14 +80,14 @@ function SecureFieldsCompound() {
 								value={''}
 							/>
 						</div>
+						<button
+							type="button"
+							onClick={() => onSubmit(values, setTouched, isValid)}
+							className="rounded-md bg-green-400 p-[10px] w-fit"
+						>
+							Enviar Pago
+						</button>
 					</MPFormC>
-					<button
-						type="button"
-						onClick={() => onSubmit(values, setTouched, isValid)}
-						className="rounded-md bg-green-400 p-[10px] w-fit"
-					>
-						Enviar Pago
-					</button>
 				</Form>
 			)}
 		</Formik>
