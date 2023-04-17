@@ -16,7 +16,7 @@ export interface IPaymentMethodInfo {
 }
 
 export interface IErrorMessagesObject {
-	invalid: boolean;
+	isInvalid: boolean;
 	message?: string;
 }
 

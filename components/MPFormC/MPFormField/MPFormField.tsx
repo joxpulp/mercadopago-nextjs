@@ -13,14 +13,14 @@ function MPFormField({ id, label, errorMessage, focusState }: IMPFormField) {
 			<div
 				id={id}
 				className={`${
-					errorMessage.invalid
+					errorMessage.isInvalid
 						? 'border-red-500'
 						: focusState
 						? 'border-purple-500'
 						: 'border-[#D4D8E1]'
 				} w-full border transition-all duration-200 h-[48px] px-[15px] py-[13px] rounded-[4px]`}
 			></div>
-			{errorMessage.invalid && (
+			{errorMessage.isInvalid && (
 				<div className="text-red-500">{errorMessage.message}</div>
 			)}
 		</div>

@@ -28,9 +28,9 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 			cardType: '',
 		});
 	const [fieldData, setFieldData] = useState<IFieldData>({
-		cardNumber: { error: { invalid: false }, isFocus: false },
-		expirationDate: { error: { invalid: false }, isFocus: false },
-		securityCode: { error: { invalid: false }, isFocus: false },
+		cardNumber: { error: { isInvalid: false }, isFocus: false },
+		expirationDate: { error: { isInvalid: false }, isFocus: false },
+		securityCode: { error: { isInvalid: false }, isFocus: false },
 	});
 
 	const setFocusState = ({ field }: IMPEventAttributes) => {
@@ -54,7 +54,7 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 				...prev,
 				[field]: {
 					...prev[field],
-					error: { invalid: true, message: errorMessage.message },
+					error: { isInvalid: true, message: errorMessage.message },
 				},
 			}));
 		} else {
@@ -62,7 +62,7 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 				...prev,
 				[field]: {
 					...prev[field],
-					error: { invalid: false, message: '' },
+					error: { isInvalid: false, message: '' },
 				},
 			}));
 		}
@@ -106,7 +106,7 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 								expirationDate: {
 									...prev.expirationDate,
 									error: {
-										invalid: true,
+										isInvalid: true,
 										message: getErrorMessage(errorMessages, e.field)?.message,
 									},
 								},
@@ -117,7 +117,7 @@ export const useMercadoPago = (publicKey: string, config: IConfig) => {
 								[e.field]: {
 									...prev[e.field as 'cardNumber' | 'securityCode'],
 									error: {
-										invalid: true,
+										isInvalid: true,
 										message: getErrorMessage(errorMessages, e.field)?.message,
 									},
 								},
