@@ -1,7 +1,51 @@
+export interface IConfig {
+	style: {
+		color: string;
+		placeholderColor: string;
+	};
+	placeholder: {
+		cardNumber?: string;
+		expirationDate?: string;
+		securityCode?: string;
+	};
+}
+
+export interface IPaymentMethodInfo {
+	brand: string;
+	cardType: string;
+}
+
+export interface IErrorMessagesObject {
+	isInvalid: boolean;
+	message?: string;
+}
+
+export interface IFieldDataObject {
+	error: IErrorMessagesObject;
+	isFocus: boolean;
+}
+
+export interface IFieldData {
+	cardNumber: IFieldDataObject;
+	expirationDate: IFieldDataObject;
+	securityCode: IFieldDataObject;
+}
+
+export interface IMPEventAttributes {
+	field: 'cardNumber' | 'expirationDate' | 'securityCode';
+	errorMessages: IErrorMessages[];
+}
+
 export interface IErrorMessagesDetails {
 	reason: string;
-	expectedType: string;
+	expected_type: string;
 }
+export interface ICardInfo {
+	cardholderName: string;
+	identificationType: string;
+	identificationNumber: string;
+}
+
 export interface IErrorMessages {
 	cause: string;
 	message: string;
@@ -17,26 +61,6 @@ export interface IIdentificationTypes {
 	max_length: number;
 }
 
-export interface IPaymentMethodInfo {
-	brand: string;
-	cardType: string;
-}
-
-export interface IErrorMessagesObject {
-	invalid: boolean;
-	error: string;
-	type: string;
-}
-
-export interface IErrorMessagesState {
-	[k: string]: IErrorMessagesObject;
-}
-
-export interface ICardInfo {
-	cardholderName: string;
-	identificationType: string;
-	identificationNumber: string;
-}
 
 interface Identification {
 	number: string;
@@ -64,18 +88,4 @@ export interface ICreateCardToken {
 	require_esc: boolean;
 	card_number_length: number;
 	security_code_length: number;
-}
-
-export interface IConfig {
-	style: {
-		color: string;
-		placeholderColor: string;
-		focusBorderColor: string;
-		errorBorderColor: string;
-	};
-	placeholder: {
-		cardNumber?: string;
-		expirationDate?: string;
-		securityCode?: string;
-	};
 }
