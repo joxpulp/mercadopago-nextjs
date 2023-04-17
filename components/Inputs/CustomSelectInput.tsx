@@ -110,7 +110,7 @@ function CustomSelectInput({
 					</div>
 				)}
 			</Listbox>
-			<div className="error-message mt-[5px]">
+			<div className="text-red-500 mt-[5px]">
 				<ErrorMessage name={inputName} />
 			</div>
 		</div>

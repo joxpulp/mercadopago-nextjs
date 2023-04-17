@@ -143,9 +143,11 @@ MPFormC.SecurityCode = function MPFormSecurityCode({
 MPFormC.DocumentSelect = function MPFormDocumenSelect({
   inputName,
   label,
+  placeholder
 }: {
   inputName: string;
   label: string;
+  placeholder: string;
 }) {
   const { idTypes } = useMPFormContext();
   const idModeling = idTypes?.map((id) => {
@@ -159,6 +161,7 @@ MPFormC.DocumentSelect = function MPFormDocumenSelect({
       <CustomSelectInput
         label={label}
         inputName={inputName}
+        placeholder={placeholder}
         value={'dni'}
         options={idModeling}
       />

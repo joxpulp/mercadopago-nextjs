@@ -7,23 +7,28 @@ import MPFormC from './ MPFormC';
 function MPCardForm() {
   const initialValues = {
     cardholderName: '',
-    documentType: { id: 'DNI', option: 'DNI' },
+    documentType: null,
     documentNumber: '',
   };
 
   const validationSchema = Yup.object({
     cardholderName: Yup.string().required('Name is required'),
-    documentNumber: Yup.string().required('DocumentType is required'),
+    documentType: Yup.object().required('Document Type is required'),
+    documentNumber: Yup.string().required('Document Number is required'),
   });
 
   const onSubmit = async (values: any, setTouched: any, isValid: boolean) => {
-    const fields = { cardholderName: true, documentNumber: true };
+    const fields = {
+      cardholderName: true,
+      documentType: true,
+      documentNumber: true,
+    };
     // Trigger validations manually
     setTouched(fields);
     // Call createCardToken
     const token = (await window.createCardToken({
       cardholderName: values.cardholderName,
-      identificationType: values.documentType.id,
+      identificationType: values.documentType?.id ?? '',
       identificationNumber: values.documentNumber,
     })) as ICreateCardToken;
 
@@ -35,7 +40,7 @@ function MPCardForm() {
       console.log('some fields are invalid');
     }
   };
-  
+
   return (
     <Formik
       initialValues={initialValues}
@@ -71,6 +76,7 @@ function MPCardForm() {
               <MPFormC.DocumentSelect
                 label="Tipo de documento"
                 inputName="documentType"
+                placeholder="Tipo de documento"
               />
               <TextInput
                 inputName="documentNumber"
