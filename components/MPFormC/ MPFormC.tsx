@@ -14,6 +14,7 @@ import {
 	IFieldData,
 } from '../../hooks/useMercadoPago/interfaces';
 import { useMercadoPago } from '../../hooks/useMercadoPago/useMercadoPago';
+import CustomSelectInput from '../Inputs/CustomSelectInput';
 import MPFormField from './MPFormField/MPFormField';
 
 interface IMPFormContext {
@@ -132,6 +133,32 @@ MPFormC.SecurityCode = function MPFormSecurityCode({
 			focusState={fieldData.securityCode.isFocus}
 			errorMessage={fieldData.securityCode.error}
 		/>
+	);
+};
+
+MPFormC.DocumentSelect = function MPFormDocumenSelect({
+	inputName,
+	label,
+}: {
+	inputName: string;
+	label: string;
+}) {
+	const { idTypes } = useMPFormContext();
+	const idModeling = idTypes?.map((id) => {
+		return {
+			id: id.id,
+			option: id.name,
+		};
+	});
+	return (
+		<div className='w-full'>
+			<CustomSelectInput
+				label={label}
+				inputName={inputName}
+				value={'dni'}
+				options={idModeling}
+			/>
+		</div>
 	);
 };
 
