@@ -32,10 +32,8 @@ interface IPlaceholderState {
 
 interface IMPForm {
 	publicKey: string;
-	style: {
-		color: string;
-		placeholderColor: string;
-	};
+  fontColor: string;
+  placeholderColor: string;
 	className?: string;
 	children: ReactNode;
 }
@@ -55,10 +53,16 @@ const useMPFormContext = () => {
 	return context;
 };
 
-function MPFormC({ children, style, className, publicKey }: IMPForm) {
+function MPFormC({
+	children,
+	fontColor,
+	placeholderColor,
+	className,
+	publicKey,
+}: IMPForm) {
 	const [placeholder, setPlaceholder] = useState<IPlaceholderState>({});
 	const { fieldData, idTypes, createCardToken } = useMercadoPago(publicKey, {
-		style,
+		style: { color: fontColor, placeholderColor },
 		placeholder,
 	});
 
@@ -151,7 +155,7 @@ MPFormC.DocumentSelect = function MPFormDocumenSelect({
 		};
 	});
 	return (
-		<div className='w-full'>
+		<div className="w-full">
 			<CustomSelectInput
 				label={label}
 				inputName={inputName}

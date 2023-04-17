@@ -45,11 +45,9 @@ function SecureFieldsCompound() {
 				<Form>
 					<MPFormC
 						publicKey="TEST-12e0021e-da80-41e0-bf96-14d02ea8fe9c"
+						fontColor="#000000"
+						placeholderColor="#D4D8E1"
 						className="m-[20px] w-[50%] flex flex-col gap-[13px]"
-						style={{
-							color: '#000000',
-							placeholderColor: '#D4D8E1',
-						}}
 					>
 						<TextInput
 							inputName="cardholderName"
