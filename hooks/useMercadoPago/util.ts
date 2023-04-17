@@ -1,20 +1,20 @@
 import { IErrorMessages } from './interfaces';
 
 export const getErrorMessage = (
-	errorMessages: IErrorMessages[],
-	field?: string
+  errorMessages: IErrorMessages[],
+  field?: string
 ) => {
-	if (field) {
-		return errorMessages.find((error) => (error.field === field));
-	}
+  if (field) {
+    return errorMessages.find((error) => (error.field === field));
+  }
 
-	const invalidValue = errorMessages.find(
-		(error) => error.cause === 'invalid_value'
-	);
+  const invalidValue = errorMessages.find(
+    (error) => error.cause === 'invalid_value'
+  );
 
-	if (invalidValue) {
-		return invalidValue;
-	}
+  if (invalidValue) {
+    return invalidValue;
+  }
 
-	return errorMessages.find((error) => error.cause === 'invalid_length');
+  return errorMessages.find((error) => error.cause === 'invalid_length');
 };
