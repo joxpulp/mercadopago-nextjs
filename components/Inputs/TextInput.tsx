@@ -62,8 +62,10 @@ function TextInput({
 			</div>
 			<div className="relative">
 				<Field
-					className={`w-full border transition-all duration-200 h-[48px] px-[15px] py-[13px] rounded-[4px] outline-none border-[#D4D8E1] focus:border-purple-500 ${
-						meta.error && meta.touched && 'border-red-500'
+					className={`w-full border transition-all duration-200 h-[48px] px-[15px] py-[13px] rounded-[4px] outline-none ${
+						meta.error && meta.touched
+							? 'border-red-500'
+							: 'border-[#D4D8E1] focus:border-purple-500'
 					} ${disabled && 'bg-grey-200 text-grey-400'}`}
 					type={type}
 					name={inputName}
