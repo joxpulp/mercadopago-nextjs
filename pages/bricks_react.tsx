@@ -23,7 +23,7 @@ export default function BricksReact() {
       <div className="form-mp">
         <CardPayment
           initialization={{
-            amount: 100,
+            amount: 2,
             payer: { email: 'joxpulp@gmail.com' },
           }}
           onSubmit={async (params) => console.log(params)}
