@@ -1,8 +1,8 @@
-import { initMercadoPago, CardPayment } from '@mercadopago/sdk-react';
-import React from 'react';
+import { initMercadoPago, CardPayment } from "@mercadopago/sdk-react";
+import React from "react";
 
-initMercadoPago('TEST-12e0021e-da80-41e0-bf96-14d02ea8fe9c', {
-  locale: 'es-AR',
+initMercadoPago("TEST-12e0021e-da80-41e0-bf96-14d02ea8fe9c", {
+  locale: "es-AR",
 });
 
 declare global {
@@ -23,8 +23,8 @@ export default function BricksReact() {
       <div className="form-mp">
         <CardPayment
           initialization={{
-            amount: 100,
-            payer: { email: 'joxpulp@gmail.com' },
+            amount: 3,
+            payer: { email: "joxpulp@gmail.com" },
           }}
           onSubmit={async (params) => console.log(params)}
           customization={{
@@ -34,23 +34,23 @@ export default function BricksReact() {
               hidePaymentButton: true,
               style: {
                 customVariables: {
-                  baseColor: '#3CA870',
-                  outlinePrimaryColor: '#D4D8E1',
-                  borderRadiusMedium: '4px',
-                  inputVerticalPadding: '13px',
-                  inputHorizontalPadding: '15px',
-                  inputFocusedBorderWidth: '1px',
+                  baseColor: "#3CA870",
+                  outlinePrimaryColor: "#D4D8E1",
+                  borderRadiusMedium: "4px",
+                  inputVerticalPadding: "13px",
+                  inputHorizontalPadding: "15px",
+                  inputFocusedBorderWidth: "1px",
                 },
               },
               texts: {
                 cardNumber: {
-                  label: 'Número de la tarjeta',
+                  label: "Número de la tarjeta",
                 },
                 expirationDate: {
-                  label: 'Fecha de vencimiento',
+                  label: "Fecha de vencimiento",
                 },
                 securityCode: {
-                  label: 'Código CVC',
+                  label: "Código CVC",
                 },
               },
             },
