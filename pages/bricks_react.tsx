@@ -30,7 +30,6 @@ export default function BricksReact() {
           customization={{
             visual: {
               hideFormTitle: true,
-              // Dont know why this is available if i cant recover form details to use with a custom submit button
               hidePaymentButton: true,
               style: {
                 customVariables: {
